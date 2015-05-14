@@ -1,5 +1,5 @@
 # shellconv
-Small tool for disasembling shellcode (using objdump)<br/>
+Small tool for disassembling shellcode (using objdump)<br/>
 <pre>
 Use: ./shellconv.py [inFile] [arch:optional] [outFile:optional]
 arch: defined as in objdump -m, default: i386
