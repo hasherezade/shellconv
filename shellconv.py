@@ -49,10 +49,16 @@ def dwordstr_to_str(imm_str):
     return "".join(chars)
 
 def fetch_imm(line):
-    val = re.findall(IMM_DWORD, line)
-    if len(val) > 0:
-        imm_str = dwordstr_to_str(val[0])
-        return imm_str + " -> \"" + imm_str[::-1]+"\""
+    vals = re.findall(IMM_DWORD, line)
+    imm_strs = []
+    for val in vals:
+        imm_strs.append(dwordstr_to_str(val))
+    if not imm_strs:
+       return
+    rev_strs = []
+    for val in imm_strs:
+        rev_strs.append(val[::-1])
+    return "".join(imm_strs) + "-> \"" + "".join(rev_strs)+"\""
 
 def color_disasm_print(disasm_lines):
     for line in disasm_lines:
