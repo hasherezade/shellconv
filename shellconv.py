@@ -62,6 +62,8 @@ def color_disasm_print(disasm_lines):
 
         if has_keyword(line, ['push']):
             colorterm.color_msg(colorterm.GREEN, line)
+        elif has_keyword(line, ['call','jmp']):
+            colorterm.color_msg(colorterm.YELLOW, line)
         elif has_keyword(line,['int']):
             colorterm.color_msg(colorterm.RED, line)
         else:
