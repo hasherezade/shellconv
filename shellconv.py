@@ -13,7 +13,7 @@ import colorterm
 
 HEX_NUM = '[0-9a-f-A-F]'
 SHELC_CHUNK = r'\\x' + HEX_NUM + '{2}'
-DISASM_LINE = r'\s?[0-9a-f]*:\s[0-9a-f]{2}\s[0-9a-f]{2}\s*\w*\s.*'
+DISASM_LINE = r'\s?[0-9a-f]*:\s[0-9a-f]{2}.*'
 IMM_DWORD = HEX_NUM + '{8}'
 
 ARG_INFILE = 1
