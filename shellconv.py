@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-"""shellconv.py: Fetches shellcode (in typical format) from a file and converts it into assembly with the help of objdump."""
+"""shellconv.py: Fetches shellcode (in typical format) from a file and converts it
+into assembly with the help of objdump."""
 
 __author__ = 'hasherezade (hasherezade.net)'
 __license__ = "GPL"
@@ -11,10 +12,10 @@ import subprocess
 import binascii
 import colorterm
 
-HEX_NUM = '[0-9a-f-A-F]'
+HEX_NUM = '[0-9a-fA-F]'
 SHELC_CHUNK = r'\\x' + HEX_NUM + '{2}'
 DISASM_LINE = r'\s?[0-9a-f]*:\s[0-9a-f]{2}.*'
-IMM_DWORD = HEX_NUM + '{8}'
+IMM_DWORD = r'[0-9a-fA-F]{8}'
 
 ARG_INFILE = 1
 ARG_ARCH = 2
@@ -96,6 +97,16 @@ def disasm(fileName, arch):
     lines = process_out(out)
     color_disasm_print(lines)
 
+def print_charset(chunks):
+    charset = set()
+    for chunk in chunks:
+        charset.add(chunk)
+    print "Charset (unique = " + str(len(charset)) + "):"
+    charset = sorted(charset)
+    for char in charset:
+        print '%02x'%(char),
+    print "\n---"
+
 def main():
     argc = sys.argv.__len__()
     argv = sys.argv
@@ -125,6 +136,7 @@ def main():
 
     print "---"
     print "Length (in bytes) = " + str(len(byte_buf))
+    print_charset(byte_buf)
 
     byte_arr = bytearray(byte_buf)
     with open(out_fileName, "wb") as fileOut:
