@@ -1,6 +1,7 @@
 #!/usr/bin/env python
-"""shellconv.py: Fetches shellcode (in typical format) from a file and converts it
-into assembly with the help of objdump."""
+"""shellconv.py: Fetches shellcode (in typical format) from a file, disassemble it with the help of objdump
+and prettyprint.
+"""
 
 __author__ = 'hasherezade (hasherezade.net)'
 __license__ = "GPL"
@@ -12,10 +13,12 @@ import subprocess
 import binascii
 import colorterm
 
-HEX_NUM = '[0-9a-fA-F]'
-SHELC_CHUNK = r'\\x' + HEX_NUM + '{2}'
+HEX_BYTE = r'[0-9a-fA-F]{2}\s'
+SHELC_CHUNK = r'\\x[0-9a-fA-F]{2}'
 DISASM_LINE = r'\s?[0-9a-f]*:\s[0-9a-f]{2}.*'
 IMM_DWORD = r'[0-9a-fA-F]{8}'
+DISASM_LINENUM = r'^\s+[0-9a-f]+:\s+'
+DISASM_BYTES = r':\s+([0-9a-f]{2}\s+)+'
 
 ARG_INFILE = 1
 ARG_ARCH = 2
@@ -61,8 +64,33 @@ def fetch_imm(line):
         rev_strs.append(val[::-1])
     return "".join(imm_strs) + "-> \"" + "".join(rev_strs)+"\""
 
+def is_printable(num):
+    return (num >= 0x20 and num < 0x7f)
+
+def append_ascii(line):
+    m = re.search(DISASM_BYTES, line)
+    if not m:
+        return
+    m_lnum = re.search(DISASM_LINENUM, line)
+    if not m_lnum:
+        return
+    lnum_str = m_lnum.group(0)
+    line = line[len(lnum_str):]
+
+    bytes_str = m.group(0)
+    t = re.findall(HEX_BYTE, bytes_str)
+    ascii_line = []
+    for bytestr in t:
+        num = int (bytestr, 16)
+        if (is_printable(num)):
+            ascii_line.append(chr(num))
+        else:
+            ascii_line.append('.')
+    return lnum_str + "".join(ascii_line) + "\t" + line
+
 def color_disasm_print(disasm_lines):
     for line in disasm_lines:
+        line = append_ascii(line)
         imm = fetch_imm(line)
         if (imm):
             line += " -> " + imm
