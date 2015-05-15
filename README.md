@@ -8,7 +8,7 @@ arch: defined as in objdump -m, default: i386
 <b>DISCLAIMER</b><br/>
 This tool is intended to be minimalistic.<br/>
 It may not give proper results in case of complicated/obfuscated shellcode. In such cases, please refer to tools of appropriate complexity.<br/>
-<i>If you still think, that I should develop this tool further, and make it a fully-fledged app, feel free to write me an e-mail :)</i><hr/>
+<i>If you still think, that I should develop this tool further, and make it a fully-fledged app, feel free to write me an e-mail :) [hasherezade-at-op.pl]</i><hr/>
 examples:
 -
 1) https://www.exploit-db.com/exploits/36921/<br/>
