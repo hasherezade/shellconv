@@ -99,8 +99,16 @@ def color_disasm_print(disasm_lines):
             colorterm.color_msg(colorterm.GREEN, line)
         elif has_keyword(orig_line, ['call','jmp']):
             colorterm.color_msg(colorterm.YELLOW, line)
+        elif has_keyword(orig_line, ['jn']):
+            colorterm.color_msg(colorterm.PURPLE, line)
+        elif has_keyword(orig_line, ['j']):
+            colorterm.color_msg(colorterm.LIGHTBLUE, line)
         elif has_keyword(orig_line,['int']):
             colorterm.color_msg(colorterm.RED, line)
+        elif has_keyword(orig_line,['nop']):
+            colorterm.color_msg(colorterm.GREY, line)
+        elif has_keyword(orig_line,['bad']):
+            colorterm.color_msg(colorterm.BG_RED, line)
         else:
             colorterm.color_msg(colorterm.BLUE, line)
     return
