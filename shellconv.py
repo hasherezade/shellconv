@@ -89,17 +89,17 @@ def append_ascii(line):
     return lnum_str + "".join(ascii_line) + "\t" + line
 
 def color_disasm_print(disasm_lines):
-    for line in disasm_lines:
-        line = append_ascii(line)
+    for orig_line in disasm_lines:
+        line = append_ascii(orig_line)
         imm = fetch_imm(line)
         if (imm):
             line += " -> " + imm
 
-        if has_keyword(line, ['push']):
+        if has_keyword(orig_line, ['push']):
             colorterm.color_msg(colorterm.GREEN, line)
-        elif has_keyword(line, ['call','jmp']):
+        elif has_keyword(orig_line, ['call','jmp']):
             colorterm.color_msg(colorterm.YELLOW, line)
-        elif has_keyword(line,['int']):
+        elif has_keyword(orig_line,['int']):
             colorterm.color_msg(colorterm.RED, line)
         else:
             colorterm.color_msg(colorterm.BLUE, line)
