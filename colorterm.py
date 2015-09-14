@@ -21,10 +21,13 @@ def color_signed_msg(color, sign, msg):
     if not color or not sign:
         print msg
         return
+    if not is_linux():
+        print '[' + sign + '] ' + msg
+        return
     print BOLD + color +'[' + sign + '] ' + COLOR_END + msg
 
 def color_msg(color,msg):
-    if not color:
+    if not color or not is_linux():
         print msg
         return
     print color + msg + COLOR_END
@@ -46,3 +49,11 @@ def warn(msg):
 
 def err( msg):
     color_signed_msg(RED, '-', msg)
+
+def is_linux():
+    from sys import platform as _platform
+    if "linux" in _platform :
+        return True
+    return False
+
+
