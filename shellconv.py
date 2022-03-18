@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 """shellconv.py: Fetches shellcode (in typical format) from a file, disassemble it with the help of objdump
 and prettyprint.
 """
