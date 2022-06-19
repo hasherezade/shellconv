@@ -1,5 +1,6 @@
 # shellconv
-Small tool for disassembling shellcode (using objdump)<br/>
+Small tool for disassembling shellcode (using [objdump](https://linux.die.net/man/1/objdump))
+
 ```
 usage: shellconv.py [-h] --infile INFILE [--arch ARCH] [--outfile OUTFILE]
 
