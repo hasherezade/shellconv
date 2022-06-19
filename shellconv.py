@@ -153,7 +153,8 @@ def main():
     parser.add_argument('--outfile', dest="outfile", default="out.tmp", help="Output file", required=False)
     args = parser.parse_args()
     
-    os.system('color') #init colors
+    if sys.platform == 'win32':
+        os.system('color') #init colors
     
     arch = args.arch
     in_fileName = args.infile
