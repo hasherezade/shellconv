@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 """shellconv.py: Fetches shellcode (in typical format) from a file, disassemble it with the help of objdump
 and prettyprint.
 """
@@ -11,7 +11,7 @@ import sys
 import re
 import subprocess
 import binascii
-import colorterm
+import termcolor
 
 HEX_BYTE = r'[0-9a-fA-F]{2}\s'
 SHELC_CHUNK = r'\\x[0-9a-fA-F]{2}'
@@ -47,10 +47,11 @@ def chunkstring(string, chunk_len):
 
 def dwordstr_to_str(imm_str):
     chunks = list(chunkstring(imm_str, 2))
-    chars = []
+    my_str = ""
     for c in chunks:
-        chars.append(binascii.unhexlify(c))
-    return "".join(chars)
+        val = binascii.unhexlify(c)
+        my_str += val.decode()
+    return my_str
 
 def fetch_imm(line):
     vals = re.findall(IMM_DWORD, line)
@@ -96,40 +97,40 @@ def color_disasm_print(disasm_lines):
             line += " -> " + imm
 
         if has_keyword(orig_line, ['push']):
-            colorterm.color_msg(colorterm.GREEN, line)
+            print(termcolor.colored(line,'green'))
         elif has_keyword(orig_line, ['call','jmp']):
-            colorterm.color_msg(colorterm.YELLOW, line)
+            print(termcolor.colored(line,'yellow'))
         elif has_keyword(orig_line, ['jn']):
-            colorterm.color_msg(colorterm.PURPLE, line)
+            print(termcolor.colored(line,'purple'))
         elif has_keyword(orig_line, ['j']):
-            colorterm.color_msg(colorterm.LIGHTBLUE, line)
+            print(termcolor.colored(line,'cyan'))
         elif has_keyword(orig_line,['int']):
-            colorterm.color_msg(colorterm.RED, line)
+            print(termcolor.colored(line,'magenta', attrs=['bold']))
         elif has_keyword(orig_line,['nop']):
-            colorterm.color_msg(colorterm.GREY, line)
+            print(termcolor.colored(line,'grey'))
         elif has_keyword(orig_line,['bad']):
-            colorterm.color_msg(colorterm.BG_RED, line)
+            print(termcolor.colored(line,'white','on_red'))
         else:
-            colorterm.color_msg(colorterm.BLUE, line)
+            print(termcolor.colored(line,'blue'))
     return
 
 def process_out(out):
-    t = re.findall(DISASM_LINE, out)
+    t = re.findall(DISASM_LINE, out.decode('utf-8'))
     lines = []
     for chunk in t:
         lines.append(chunk)
     return lines
 
 def disasm(fileName, arch):
-    print fileName
-    print arch
+    print(fileName)
+    print(arch)
     process_data = ['objdump', '-D', '-b','binary','-m', arch, '-M','intel', fileName]
     p = subprocess.Popen(process_data, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p.communicate()
     if err:
-        colorterm.err("Error: " + err)
+        print(termcolor.colored("Error:",'red', attrs=['underline']) + " " + err.decode('utf-8'))
         return
-    colorterm.info("OK!")
+    print("OK!")
     lines = process_out(out)
     color_disasm_print(lines)
 
@@ -137,41 +138,44 @@ def print_charset(chunks):
     charset = set()
     for chunk in chunks:
         charset.add(chunk)
-    print "Charset (unique = " + str(len(charset)) + "):"
+    print("Charset (unique = " + str(len(charset)) + "):")
     charset = sorted(charset)
     for char in charset:
-        print '%02x'%(char),
-    print "\n---"
+        print('%02x'%(char), end=' ')
+    print("\n---")
 
 def main():
+
     argc = sys.argv.__len__()
     argv = sys.argv
     arch = "i386"
 
     if (argc < ARG_MIN):
-        print "Use: "+argv[0] + " " + "<inFile> <arch:optional> <outFile:optional>"
-        print "arch: defined as in objdump -m, default: " + arch
+        print("Use: "+argv[0] + " " + "<inFile> <arch:optional> <outFile:optional>")
+        print("arch: defined as in objdump -m, default: " + arch)
         exit(-1)
-
+        
+    os.system('color') #init colors
+    
     in_fileName = argv[ARG_INFILE]
     arch = "i386"
     if (argc > ARG_ARCH):
         arch = argv[ARG_ARCH]
     else:
-        print "Default arch: " + arch
+        print("Default arch: " + arch)
 
     out_fileName = "out.tmp"
     if (argc > ARG_OUTFILE):
         out_fileName = argv[ARG_OUTFILE]
     else:
-        print "Default output (binary): " + out_fileName
+        print("Default output (binary): " + out_fileName)
 
     with open(in_fileName, "r") as fileIn:
         buf = fileIn.read()
         byte_buf = get_chunks(buf)
 
-    print "---"
-    print "Length (in bytes) = " + str(len(byte_buf))
+    print("---")
+    print("Length (in bytes) = " + str(len(byte_buf)))
     print_charset(byte_buf)
 
     byte_arr = bytearray(byte_buf)
@@ -181,4 +185,5 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+
 
