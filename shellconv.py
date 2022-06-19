@@ -12,6 +12,7 @@ import re
 import subprocess
 import binascii
 import termcolor
+import argparse
 
 HEX_BYTE = r'[0-9a-fA-F]{2}\s'
 SHELC_CHUNK = r'\\x[0-9a-fA-F]{2}'
@@ -145,30 +146,18 @@ def print_charset(chunks):
     print("\n---")
 
 def main():
-
-    argc = sys.argv.__len__()
-    argv = sys.argv
-    arch = "i386"
-
-    if (argc < ARG_MIN):
-        print("Use: "+argv[0] + " " + "<inFile> <arch:optional> <outFile:optional>")
-        print("arch: defined as in objdump -m, default: " + arch)
-        exit(-1)
-        
+    # parse input arguments:
+    parser = argparse.ArgumentParser(prog='shellconv.py', description="Shellconv: small tool for disassembling shellcode (using objdump)")
+    parser.add_argument('--infile', dest="infile", default=None, help="The shellcode to be converted", required=True)
+    parser.add_argument('--arch', dest="arch", default="i386", help="The architecture to be used (options: as in objdump -m)", required=False)
+    parser.add_argument('--outfile', dest="outfile", default="out.tmp", help="Output file", required=False)
+    args = parser.parse_args()
+    
     os.system('color') #init colors
     
-    in_fileName = argv[ARG_INFILE]
-    arch = "i386"
-    if (argc > ARG_ARCH):
-        arch = argv[ARG_ARCH]
-    else:
-        print("Default arch: " + arch)
-
-    out_fileName = "out.tmp"
-    if (argc > ARG_OUTFILE):
-        out_fileName = argv[ARG_OUTFILE]
-    else:
-        print("Default output (binary): " + out_fileName)
+    arch = args.arch
+    in_fileName = args.infile
+    out_fileName = args.outfile
 
     with open(in_fileName, "r") as fileIn:
         buf = fileIn.read()
