@@ -105,11 +105,11 @@ def color_disasm_print(disasm_lines):
         elif has_keyword(orig_line, ['j']):
             print(termcolor.colored(line,'cyan'))
         elif has_keyword(orig_line,['int']):
-            print(termcolor.colored(line,'red'))
+            print(termcolor.colored(line,'magenta', attrs=['bold']))
         elif has_keyword(orig_line,['nop']):
             print(termcolor.colored(line,'grey'))
         elif has_keyword(orig_line,['bad']):
-            print(termcolor.colored(line,'on_red'))
+            print(termcolor.colored(line,'white','on_red'))
         else:
             print(termcolor.colored(line,'blue'))
     return
@@ -128,7 +128,7 @@ def disasm(fileName, arch):
     p = subprocess.Popen(process_data, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p.communicate()
     if err:
-        print("Error: " + err)
+        print(termcolor.colored("Error:",'red', attrs=['underline']) + " " + err.decode('utf-8'))
         return
     print("OK!")
     lines = process_out(out)
@@ -145,6 +145,7 @@ def print_charset(chunks):
     print("\n---")
 
 def main():
+
     argc = sys.argv.__len__()
     argv = sys.argv
     arch = "i386"
@@ -153,7 +154,9 @@ def main():
         print("Use: "+argv[0] + " " + "<inFile> <arch:optional> <outFile:optional>")
         print("arch: defined as in objdump -m, default: " + arch)
         exit(-1)
-
+        
+    os.system('color') #init colors
+    
     in_fileName = argv[ARG_INFILE]
     arch = "i386"
     if (argc > ARG_ARCH):
