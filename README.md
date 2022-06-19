@@ -1,16 +1,27 @@
 # shellconv
 Small tool for disassembling shellcode (using objdump)<br/>
-<pre>
-Use: ./shellconv.py [inFile] [arch:optional] [outFile:optional]
-arch: defined as in objdump -m, default: i386
-</pre>
-<hr/>
-<b>DISCLAIMER</b><br/>
-This tool is intended to be minimalistic.<br/>
-It may not give proper results in case of complicated/obfuscated shellcode. In such cases, please refer to tools of appropriate complexity.<br/>
+```
+usage: shellconv.py [-h] --infile INFILE [--arch ARCH] [--outfile OUTFILE]
 
-examples:
--
+arch: defined as in objdump -m, default: i386
+```
+---
+
+__DISCLAIMER__
+
+This tool is intended to be minimalistic.<br/>
+It may not give proper results in case of complicated/obfuscated shellcode. In such cases, please refer to tools of appropriate complexity.
+
+## Installation
+Requirements: Python3 (with PIP), objdump
+
+Install the dependencies by:
+
+```console
+pip install -r requirements.txt
+```
+
+# Demo
 
 1) https://www.exploit-db.com/exploits/36921/
 
